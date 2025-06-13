@@ -220,13 +220,14 @@ class QuoteGenerate {
 
   async downloadMediaImage (media, mediaSize, type = 'id', crop = true) {
     let mediaUrl
+    let load
     if (type === 'base64') {
       load = await loadImage(Buffer.from(media, 'base64'))
       return load
     }
     if (type === 'id') mediaUrl = await this.telegram.getFileLink(media).catch(console.error)
     else mediaUrl = media
-    const load = await loadImageFromUrl(mediaUrl)
+    load = await loadImageFromUrl(mediaUrl)
     if (crop || mediaUrl.match(/.webp/)) {
       const imageSharp = sharp(load)
       const imageMetadata = await imageSharp.metadata()
