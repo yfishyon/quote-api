@@ -1127,10 +1127,10 @@ class QuoteGenerate {
       maxMediaSize = width / 3 * scale
       if (message.text && maxMediaSize < textCanvas.width) maxMediaSize = textCanvas.width
 
-      if (media.is_animated) {
-        media = media.thumb
-        maxMediaSize = maxMediaSize / 2
-      }
+      if (type === 'id' && media && typeof media === 'object' && media.is_animated) {
+        media = media.thumb;
+        maxMediaSize = maxMediaSize / 2;
+    }
 
       mediaCanvas = await this.downloadMediaImage(media, maxMediaSize, type, crop)
       mediaType = message.mediaType
