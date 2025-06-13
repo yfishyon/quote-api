@@ -221,8 +221,8 @@ class QuoteGenerate {
   async downloadMediaImage (media, mediaSize, type = 'id', crop = true) {
     let mediaUrl
     if (type === 'base64') {
-      img = await loadImage(Buffer.from(media, 'base64'))
-      return img
+      load = await loadImage(Buffer.from(media, 'base64'))
+      return load
     }
     if (type === 'id') mediaUrl = await this.telegram.getFileLink(media).catch(console.error)
     else mediaUrl = media
