@@ -143,7 +143,10 @@ class QuoteGenerate {
 
   async downloadAvatarImage (user) {
     let avatarImage
-
+    if (user.photo && user.photo.base64) {
+      avatarImage = await loadImage(Buffer.from(user.photo.base64, 'base64'))
+      return avatarImage
+    }
     let nameLatters
     if (user.first_name && user.last_name) nameLatters = runes(user.first_name)[0] + (runes(user.last_name || '')[0])
     else {
@@ -217,6 +220,10 @@ class QuoteGenerate {
 
   async downloadMediaImage (media, mediaSize, type = 'id', crop = true) {
     let mediaUrl
+    if (type === 'base64') {
+      img = await loadImage(Buffer.from(media, 'base64'))
+      return img
+    }
     if (type === 'id') mediaUrl = await this.telegram.getFileLink(media).catch(console.error)
     else mediaUrl = media
     const load = await loadImageFromUrl(mediaUrl)
@@ -1103,7 +1110,10 @@ class QuoteGenerate {
       let crop = false
       if (message.mediaCrop) crop = true
 
-      if (message.media.url) {
+      if (message.media.base64) {
+        type = 'base64'
+        media = message.media.base64
+      } else if (message.media.url) {
         type = 'url'
         media = message.media.url
       } else {
